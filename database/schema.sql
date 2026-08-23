@@ -1,0 +1,33 @@
+-- Crear la base de datos si no existe
+CREATE DATABASE IF NOT EXISTS volvid_db;
+USE volvid_db;
+
+-- Tabla de Clínicas (Clinics) con soporte para prueba de 14 días
+CREATE TABLE IF NOT EXISTS clinics (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  size VARCHAR(50) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  status ENUM('trial', 'active', 'suspended') DEFAULT 'trial',
+  trial_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  trial_end TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla de Usuarios (Administradores y Veterinarios)
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id INT NOT NULL,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  terms_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+  role VARCHAR(50) DEFAULT 'admin',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE
+);
