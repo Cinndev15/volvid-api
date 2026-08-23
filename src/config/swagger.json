@@ -9,6 +9,10 @@
     {
       "url": "http://localhost:3001",
       "description": "Local Development Server"
+    },
+    {
+      "url": "https://api.volvidmascotas.com",
+      "description": "Production Server"
     }
   ],
   "components": {
