@@ -43,16 +43,16 @@ app.get('/', (req, res) => {
   
   <style>
     :root {
-      --bg-gradient-start: #041210;
-      --bg-gradient-end: #0a1f1b;
-      --card-bg: rgba(14, 30, 27, 0.75);
-      --card-border: rgba(16, 185, 129, 0.15);
-      --text-primary: #f0fdf4;
-      --text-secondary: #94a3b8;
-      --primary-green: #10b981;
-      --hover-green: #34d399;
-      --deep-forest: #064e3b;
-      --code-bg: #090d16;
+      --bg-gradient-start: #ffffff;
+      --bg-gradient-end: #f9fafb;
+      --card-bg: #ffffff;
+      --card-border: rgba(19, 44, 37, 0.08);
+      --text-primary: #132c25; /* Deep forest green */
+      --text-secondary: #475569; /* Slate grey */
+      --primary-green: #00d97e; /* Vibrant Volvid green */
+      --hover-green: #00b86a;
+      --deep-forest: #132c25;
+      --code-bg: #f8fafc;
     }
 
     * {
@@ -77,14 +77,14 @@ app.get('/', (req, res) => {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background-color: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      background-color: rgba(0, 217, 126, 0.08);
+      border: 1px solid rgba(0, 217, 126, 0.25);
       padding: 0.5rem 1rem;
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.05em;
-      color: var(--primary-green);
+      color: #047857;
       margin-bottom: 2rem;
     }
 
@@ -93,22 +93,22 @@ app.get('/', (req, res) => {
       height: 8px;
       background-color: var(--primary-green);
       border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      box-shadow: 0 0 0 0 rgba(0, 217, 126, 0.7);
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
       0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        box-shadow: 0 0 0 0 rgba(0, 217, 126, 0.7);
       }
       70% {
         transform: scale(1);
-        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 8px rgba(0, 217, 126, 0);
       }
       100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 0 rgba(0, 217, 126, 0);
       }
     }
 
@@ -123,7 +123,7 @@ app.get('/', (req, res) => {
       font-size: 3rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      background: linear-gradient(to right, #ffffff, var(--primary-green));
+      background: linear-gradient(135deg, #132c25 0%, #10b981 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
@@ -157,21 +157,21 @@ app.get('/', (req, res) => {
       border: 1px solid var(--card-border);
       border-radius: 1rem;
       padding: 1.5rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-      transition: transform 0.2s, border-color 0.2s;
+      box-shadow: 0 10px 25px -5px rgba(19, 44, 37, 0.04);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .info-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(16, 185, 129, 0.35);
+      border-color: rgba(0, 217, 126, 0.35);
+      box-shadow: 0 12px 30px -5px rgba(19, 44, 37, 0.08);
     }
 
     .card-label {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--primary-green);
+      color: #047857;
       font-weight: 700;
       margin-bottom: 0.5rem;
     }
@@ -180,7 +180,7 @@ app.get('/', (req, res) => {
       font-size: 1.25rem;
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -199,7 +199,7 @@ app.get('/', (req, res) => {
 
     .copy-btn:hover {
       color: var(--primary-green);
-      background-color: rgba(16, 185, 129, 0.1);
+      background-color: rgba(0, 217, 126, 0.08);
     }
 
     .copy-icon {
@@ -216,8 +216,7 @@ app.get('/', (req, res) => {
       border: 1px solid var(--card-border);
       border-radius: 1.25rem;
       padding: 2rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 40px -15px rgba(19, 44, 37, 0.06);
       margin-bottom: 2rem;
     }
 
@@ -226,7 +225,7 @@ app.get('/', (req, res) => {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(19, 44, 37, 0.06);
       padding-bottom: 1rem;
     }
 
@@ -239,8 +238,8 @@ app.get('/', (req, res) => {
     .format-badge {
       font-size: 0.75rem;
       font-weight: 600;
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(71, 85, 105, 0.04);
+      border: 1px solid rgba(71, 85, 105, 0.1);
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
       color: var(--text-secondary);
@@ -265,12 +264,12 @@ app.get('/', (req, res) => {
       color: var(--text-secondary);
       font-weight: 600;
       padding: 0.75rem 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(19, 44, 37, 0.08);
     }
 
     td {
       padding: 1.25rem 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(19, 44, 37, 0.05);
       font-size: 0.9rem;
       vertical-align: middle;
     }
@@ -289,16 +288,16 @@ app.get('/', (req, res) => {
     }
 
     .method-badge.post {
-      background-color: rgba(16, 185, 129, 0.15);
-      color: var(--primary-green);
-      border: 1px solid rgba(16, 185, 129, 0.25);
+      background-color: rgba(0, 217, 126, 0.08);
+      color: #047857;
+      border: 1px solid rgba(0, 217, 126, 0.2);
     }
 
     .endpoint-path {
       font-family: monospace;
       font-size: 0.95rem;
-      color: #34d399;
-      font-weight: 500;
+      color: #047857;
+      font-weight: 600;
     }
 
     .endpoint-desc {
@@ -312,9 +311,9 @@ app.get('/', (req, res) => {
       font-weight: 600;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.05);
-      color: #cbd5e1;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(71, 85, 105, 0.05);
+      color: #475569;
+      border: 1px solid rgba(71, 85, 105, 0.12);
     }
 
     /* CTA Section */
@@ -329,21 +328,21 @@ app.get('/', (req, res) => {
       align-items: center;
       gap: 0.5rem;
       background-color: var(--primary-green);
-      color: #041210;
+      color: #ffffff;
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
       font-size: 1rem;
       padding: 0.85rem 2rem;
       border-radius: 0.75rem;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 217, 126, 0.3);
       transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
     .swagger-btn:hover {
       background-color: var(--hover-green);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 217, 126, 0.4);
     }
 
     .swagger-btn:active {
