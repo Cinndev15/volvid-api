@@ -1,4 +1,5 @@
 import { registerClinicAndAdmin, authenticateUser } from '../services/auth.service.js';
+import { sendWelcomeEmail } from '../services/email.service.js';
 
 export const register = async (req, res, next) => {
   try {
@@ -23,6 +24,16 @@ export const register = async (req, res, next) => {
         trial_start: result.clinic.trial_start,
         trial_end: result.clinic.trial_end
       }
+    });
+
+    // Send welcome email asynchronously to not block the registration response
+    sendWelcomeEmail(
+      result.user.email,
+      result.user.full_name,
+      result.clinic.name,
+      result.clinic.trial_end
+    ).catch((err) => {
+      console.error('Failed to send welcome email asynchronously:', err.message);
     });
 
   } catch (error) {

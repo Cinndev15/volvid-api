@@ -15,6 +15,13 @@ const config = {
   jwt: {
     secret: process.env.JWT_SECRET || 'fallback_secret_key_volvid_2026',
     expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+  },
+  email: {
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+    port: parseInt(process.env.SMTP_PORT, 10) || 465,
+    user: process.env.SMTP_USER || '',
+    pass: process.env.SMTP_PASS || '',
+    from: process.env.SMTP_FROM || 'Volvid Mascotas <info@volvidmascotas.com>'
   }
 };
 
