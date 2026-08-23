@@ -1,0 +1,351 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Volvid API Documentation",
+    "version": "1.0.0",
+    "description": "API REST endpoints for the Volvid application, handling veterinary clinic registrations, user administrator credentials, authentication, and the 14-day free trial."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local Development Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "ClinicRegisterPayload": {
+        "type": "object",
+        "required": [
+          "name",
+          "phone",
+          "size",
+          "country",
+          "state",
+          "city",
+          "full_name",
+          "email",
+          "password",
+          "terms_accepted"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Clínica Veterinaria San Francisco"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+57 300 123 4567"
+          },
+          "size": {
+            "type": "string",
+            "example": "1 - 2 veterinarios"
+          },
+          "country": {
+            "type": "string",
+            "example": "Colombia"
+          },
+          "state": {
+            "type": "string",
+            "example": "Antioquia"
+          },
+          "city": {
+            "type": "string",
+            "example": "Medellín"
+          },
+          "full_name": {
+            "type": "string",
+            "example": "Dr. Carlos Mendoza"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "carlos@clinicasanfrancisco.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "mypassword123"
+          },
+          "terms_accepted": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "LoginPayload": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "carlos@clinicasanfrancisco.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "mypassword123"
+          }
+        }
+      },
+      "ClinicRegisterResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Clínica registrada exitosamente. Comience su prueba de 14 días."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "clinic_id": {
+                "type": "integer",
+                "example": 1
+              },
+              "clinic_name": {
+                "type": "string",
+                "example": "Clínica Veterinaria San Francisco"
+              },
+              "user_email": {
+                "type": "string",
+                "example": "carlos@clinicasanfrancisco.com"
+              },
+              "user_name": {
+                "type": "string",
+                "example": "Dr. Carlos Mendoza"
+              },
+              "trial_start": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-08-23T21:27:24.000Z"
+              },
+              "trial_end": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2026-09-06T21:27:24.000Z"
+              }
+            }
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Inicio de sesión exitoso."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "example": "Dr. Carlos Mendoza"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "carlos@clinicasanfrancisco.com"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "admin"
+                  }
+                }
+              },
+              "clinic": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "trial"
+                  },
+                  "trial_end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-09-06T21:27:24.000Z"
+                  },
+                  "is_trial_expired": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "Los datos proporcionados no son válidos."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "example": "email"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Debe ingresar un correo electrónico válido."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new Clinic and Admin User",
+        "description": "Registers a veterinary clinic along with its first administrator account. This triggers a 14-day free trial for the clinic in the system.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClinicRegisterPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Clinic and user created successfully. 14-day trial starts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClinicRegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data, terms not accepted, or email already registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error during registration."
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "User Login / Authenticate",
+        "description": "Authenticates a user via email and password, returning a JWT token, user roles, and current clinic trial details.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in. Returns access token and user/clinic status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid email or password.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Correo electrónico o contraseña incorrectos."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,23 +1,481 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import routes from './routes/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
+
+// Load Swagger document dynamically to ensure compatibility across Node.js versions
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const swaggerDocument = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'config', 'swagger.json'), 'utf8')
+);
 
 // Global Middlewares
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Base Route
+// Base Route - Professional HTML API Landing Portal themed in Volvid branding
 app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Welcome to the Volvid API'
-  });
+  const protocol = req.protocol;
+  const host = req.get('host');
+  const baseUrl = `${protocol}://${host}`;
+
+  res.send(`
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal de documentación de la API de Volvid. Administre clínicas veterinarias y sus pruebas gratuitas de 14 días.">
+  <title>Volvid REST API Portal</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-gradient-start: #041210;
+      --bg-gradient-end: #0a1f1b;
+      --card-bg: rgba(14, 30, 27, 0.75);
+      --card-border: rgba(16, 185, 129, 0.15);
+      --text-primary: #f0fdf4;
+      --text-secondary: #94a3b8;
+      --primary-green: #10b981;
+      --hover-green: #34d399;
+      --deep-forest: #064e3b;
+      --code-bg: #090d16;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem;
+    }
+
+    /* System Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--primary-green);
+      margin-bottom: 2rem;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--primary-green);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    /* Main Branding */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, var(--primary-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    /* Grid Row Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 3rem;
+    }
+
+    @media (min-width: 768px) {
+      .info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary-green);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-value {
+      font-size: 1.25rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .copy-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: var(--primary-green);
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .copy-icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Core Endpoints Panel */
+    .endpoints-panel {
+      width: 100%;
+      max-width: 1000px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      margin-bottom: 2rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 1rem;
+    }
+
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .format-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      color: var(--text-secondary);
+    }
+
+    /* Table styles */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .method-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .method-badge.post {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--primary-green);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .endpoint-path {
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #34d399;
+      font-weight: 500;
+    }
+
+    .endpoint-desc {
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .security-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* CTA Section */
+    .cta-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .swagger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--primary-green);
+      color: #041210;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .swagger-btn:hover {
+      background-color: var(--hover-green);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .swagger-btn:active {
+      transform: translateY(0);
+    }
+
+    footer {
+      margin-top: auto;
+      padding-top: 3rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Status Badge -->
+  <div class="status-badge">
+    <div class="pulse-dot"></div>
+    SYSTEM OPERATIONAL
+  </div>
+
+  <!-- Header -->
+  <header>
+    <h1>VÖLVÏD API</h1>
+    <p class="subtitle">Portal Profesional de Documentación de la API REST de Volvid. Administre clínicas veterinarias y los accesos para la prueba gratuita de 14 días.</p>
+  </header>
+
+  <!-- Info Grid Cards -->
+  <div class="info-grid">
+    <!-- Card 1: Base URL -->
+    <div class="info-card">
+      <div class="card-label">Base URL</div>
+      <div class="card-value">
+        <span id="base-url-text">${baseUrl}</span>
+        <button class="copy-btn" id="copy-url-btn" title="Copiar URL al portapapeles" onclick="copyToClipboard('${baseUrl}', 'copy-url-btn')">
+          <svg class="copy-icon" viewBox="0 0 24 24">
+            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 2: Version -->
+    <div class="info-card">
+      <div class="card-label">Version</div>
+      <div class="card-value">1.0.0 (Latest)</div>
+    </div>
+
+    <!-- Card 3: Authentication -->
+    <div class="info-card">
+      <div class="card-label">Authentication</div>
+      <div class="card-value">JWT Bearer Token</div>
+    </div>
+  </div>
+
+  <!-- Endpoints Panel -->
+  <div class="endpoints-panel">
+    <div class="panel-header">
+      <div class="panel-title">Core API Endpoints</div>
+      <div class="format-badge">Format: JSON</div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+            <th>Security</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/auth/register</span></td>
+            <td><span class="endpoint-desc">Registra una nueva veterinaria y su usuario administrador. Activa la prueba de 14 días.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/auth/login</span></td>
+            <td><span class="endpoint-desc">Inicia sesión y genera un Bearer JWT token, devolviendo la fecha de expiración de la prueba.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Swagger CTA -->
+    <div class="cta-container">
+      <a href="/api-docs" class="swagger-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        Explorar API Interactiva (Swagger UI)
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Volvid. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    function copyToClipboard(text, btnId) {
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById(btnId);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span style="font-size: 0.7rem; font-weight: 700; color: #10b981; font-family: sans-serif;">Copiado!</span>';
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, 1500);
+      }).catch(err => {
+        console.error('Error al copiar: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
+  `);
 });
+
+// Swagger Router / Configuration
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // API Routes
 app.use('/api', routes);
