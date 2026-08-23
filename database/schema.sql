@@ -1,7 +1,3 @@
--- Crear la base de datos si no existe
-CREATE DATABASE IF NOT EXISTS volvid_db;
-USE volvid_db;
-
 -- Tabla de Clínicas (Clinics) con soporte para prueba de 14 días
 CREATE TABLE IF NOT EXISTS clinics (
   id INT AUTO_INCREMENT PRIMARY KEY,
