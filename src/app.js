@@ -503,6 +503,24 @@ app.get('/', (req, res) => {
             <td><span class="security-badge">PUBLIC</span></td>
           </tr>
           <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/appointments</span></td>
+            <td><span class="endpoint-desc">Programa una nueva cita médica para un paciente vinculado a la clínica con fecha, hora y veterinario asignado.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/appointments/clinic/:clinicId</span></td>
+            <td><span class="endpoint-desc">Obtiene la agenda y calendario de citas de la clínica con filtros por fecha, mes y estado.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">PUT</span></td>
+            <td><span class="endpoint-path">/api/appointments/:id/status</span></td>
+            <td><span class="endpoint-desc">Actualiza el estado de la cita (scheduled, waiting, in-progress, completed, cancelled).</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
             <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
             <td><span class="endpoint-path">/api/pets</span></td>
             <td><span class="endpoint-desc">Obtiene la lista de mascotas registradas por el propietario autenticado.</span></td>

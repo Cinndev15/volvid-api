@@ -190,3 +190,25 @@ CREATE TABLE IF NOT EXISTS medical_records (
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
   FOREIGN KEY (vet_id) REFERENCES veterinarians(id)
 );
+
+
+-- Tabla de Citas Médicas por Veterinaria (Appointments)
+CREATE TABLE IF NOT EXISTS appointments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id INT NOT NULL,
+  pet_id INT NOT NULL,
+  owner_id INT NOT NULL,
+  vet_id INT NULL,
+  appointment_date DATE NOT NULL,
+  appointment_time VARCHAR(20) NOT NULL,
+  duration_minutes INT DEFAULT 30,
+  motive VARCHAR(255) NOT NULL,
+  notes TEXT NULL,
+  status ENUM('scheduled', 'waiting', 'in-progress', 'completed', 'cancelled') DEFAULT 'scheduled',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
+  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
+  FOREIGN KEY (vet_id) REFERENCES veterinarians(id) ON DELETE SET NULL
+);

@@ -1128,6 +1128,180 @@
           }
         }
       }
+    },
+    "/api/appointments": {
+      "post": {
+        "tags": [
+          "Citas y Agenda Médica"
+        ],
+        "summary": "Programar una nueva cita médica para un paciente vinculado",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clinic_id",
+                  "pet_id",
+                  "appointment_date",
+                  "appointment_time",
+                  "motive"
+                ],
+                "properties": {
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "pet_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "vet_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "appointment_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-08-25"
+                  },
+                  "appointment_time": {
+                    "type": "string",
+                    "example": "10:30 AM"
+                  },
+                  "duration_minutes": {
+                    "type": "integer",
+                    "example": 30
+                  },
+                  "motive": {
+                    "type": "string",
+                    "example": "Vacunación y chequeo general"
+                  },
+                  "notes": {
+                    "type": "string",
+                    "example": "Traer carnet de vacunas"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "scheduled",
+                      "waiting",
+                      "in-progress",
+                      "completed",
+                      "cancelled"
+                    ],
+                    "example": "scheduled"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cita médica agendada exitosamente"
+          }
+        }
+      }
+    },
+    "/api/appointments/clinic/{clinicId}": {
+      "get": {
+        "tags": [
+          "Citas y Agenda Médica"
+        ],
+        "summary": "Obtener citas médicas y calendario de una veterinaria",
+        "parameters": [
+          {
+            "name": "clinicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la clínica"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtro por fecha (YYYY-MM-DD)"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtro por estado (scheduled, waiting, completed...)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de citas médicas"
+          }
+        }
+      }
+    },
+    "/api/appointments/{id}/status": {
+      "put": {
+        "tags": [
+          "Citas y Agenda Médica"
+        ],
+        "summary": "Actualizar el estado de una cita médica",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la cita"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clinic_id",
+                  "status"
+                ],
+                "properties": {
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "scheduled",
+                      "waiting",
+                      "in-progress",
+                      "completed",
+                      "cancelled"
+                    ],
+                    "example": "in-progress"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estado actualizado"
+          }
+        }
+      }
     }
   }
 }
