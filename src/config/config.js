@@ -7,10 +7,10 @@ dotenv.config();
 const config = {
   port: process.env.PORT || 3001,
   db: {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    name: process.env.DB_NAME || 'volvid_db'
+    host: process.env.DB_HOST || '195.35.59.87',
+    user: process.env.DB_USER || 'u691340716_volvidmascotas',
+    password: process.env.DB_PASSWORD || 'T1014996985g@g',
+    name: process.env.DB_NAME || 'u691340716_volvidmascotas'
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'fallback_secret_key_volvid_2026',
@@ -19,9 +19,9 @@ const config = {
   email: {
     host: process.env.SMTP_HOST || 'smtp.hostinger.com',
     port: parseInt(process.env.SMTP_PORT, 10) || 465,
-    user: process.env.SMTP_USER || '',
-    pass: process.env.SMTP_PASS || '',
-    from: process.env.SMTP_FROM || 'Volvid Mascotas <info@volvidmascotas.com>'
+    user: process.env.SMTP_USER || 'hola@partzix.com',
+    pass: process.env.SMTP_PASS || 'T1014996985g@g',
+    from: process.env.SMTP_FROM || 'Volvid Mascotas <hola@partzix.com>'
   }
 };
 
