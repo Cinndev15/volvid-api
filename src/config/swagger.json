@@ -327,6 +327,141 @@
             }
           }
         }
+      },
+      "Breed": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": ["dog", "cat"],
+            "example": "dog"
+          },
+          "name": {
+            "type": "string",
+            "example": "Golden Retriever"
+          }
+        }
+      },
+      "PetRegisterPayload": {
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "breed_id"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Luna"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["dog", "cat"],
+            "example": "dog"
+          },
+          "breed_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "photo_url": {
+            "type": "string",
+            "example": "avatar_dog_1.png",
+            "description": "Selected avatar filename or profile photo URL."
+          },
+          "age": {
+            "type": "string",
+            "example": "2 años, 6 meses",
+            "description": "Descriptive age string."
+          },
+          "fur_color": {
+            "type": "string",
+            "example": "Marrón"
+          },
+          "temperament": {
+            "type": "string",
+            "example": "Tranquilo"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive"],
+            "example": "active",
+            "default": "active"
+          },
+          "observations": {
+            "type": "string",
+            "example": "Tiene todas sus vacunas al día y es muy sociable."
+          }
+        }
+      },
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "owner_id": {
+            "type": "integer",
+            "example": 3
+          },
+          "breed_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Luna"
+          },
+          "type": {
+            "type": "string",
+            "example": "dog"
+          },
+          "photo_url": {
+            "type": "string",
+            "nullable": true,
+            "example": "avatar_dog_1.png"
+          },
+          "age": {
+            "type": "string",
+            "nullable": true,
+            "example": "2 años, 6 meses"
+          },
+          "fur_color": {
+            "type": "string",
+            "nullable": true,
+            "example": "Marrón"
+          },
+          "temperament": {
+            "type": "string",
+            "nullable": true,
+            "example": "Tranquilo"
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true,
+            "example": "Tiene todas sus vacunas al día y es muy sociable."
+          },
+          "breed_name": {
+            "type": "string",
+            "example": "Golden Retriever"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
       }
     }
   },
@@ -476,6 +611,157 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/breeds": {
+      "get": {
+        "summary": "Get Breeds Catalog",
+        "description": "Returns all dog or cat breeds from the system, ordered alphabetically.",
+        "tags": [
+          "Catalog"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["dog", "cat"]
+            },
+            "description": "Filter by pet type: dog or cat"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of breeds returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Breed"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameter."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/pets": {
+      "post": {
+        "summary": "Register a new Pet",
+        "description": "Registers a pet linked to the currently authenticated Owner.",
+        "tags": [
+          "Pets"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PetRegisterPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pet registered successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Mascota registrada exitosamente."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Pet"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors or invalid breed selected."
+          },
+          "401": {
+            "description": "Unauthorized. Owner JWT token missing or invalid."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "get": {
+        "summary": "Get Owner's Pets",
+        "description": "Returns all registered pets belonging to the authenticated Owner.",
+        "tags": [
+          "Pets"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pets returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Pet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Owner JWT token missing or invalid."
           },
           "500": {
             "description": "Internal server error."

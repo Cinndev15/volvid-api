@@ -54,6 +54,17 @@ export const login = async (req, res, next) => {
 
     const result = await authenticateUser(email, password);
 
+    if (result.isOwner) {
+      return res.status(200).json({
+        success: true,
+        message: 'Inicio de sesión exitoso.',
+        data: {
+          token: result.token,
+          owner: result.owner
+        }
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: 'Inicio de sesión exitoso.',

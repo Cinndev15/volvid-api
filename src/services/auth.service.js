@@ -99,7 +99,50 @@ export const authenticateUser = async (email, password) => {
   );
 
   if (users.length === 0) {
-    throw new Error('INVALID_CREDENTIALS');
+    // Check in pet_owners table for pet owner conventional login
+    const [owners] = await pool.query(
+      'SELECT * FROM pet_owners WHERE email = ?',
+      [email]
+    );
+
+    if (owners.length === 0) {
+      throw new Error('INVALID_CREDENTIALS');
+    }
+
+    const owner = owners[0];
+
+    if (!owner.password_hash) {
+      throw new Error('INVALID_CREDENTIALS');
+    }
+
+    const isMatch = await bcrypt.compare(password, owner.password_hash);
+    if (!isMatch) {
+      throw new Error('INVALID_CREDENTIALS');
+    }
+
+    const token = jwt.sign(
+      {
+        ownerId: owner.id,
+        email: owner.email,
+        role: 'owner'
+      },
+      config.jwt.secret,
+      {
+        expiresIn: config.jwt.expiresIn
+      }
+    );
+
+    return {
+      token,
+      isOwner: true,
+      owner: {
+        id: owner.id,
+        full_name: owner.full_name,
+        email: owner.email,
+        avatar_url: owner.avatar_url,
+        google_id: owner.google_id
+      }
+    };
   }
 
   const user = users[0];

@@ -130,3 +130,47 @@ export const registerOwnerValidationRules = [
     }),
   handleValidationErrors
 ];
+
+// Pet registration validation schema
+export const registerPetValidationRules = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('El nombre de la mascota es requerido.'),
+  body('type')
+    .trim()
+    .isIn(['dog', 'cat'])
+    .withMessage("El tipo de mascota es requerido y debe ser 'dog' o 'cat'."),
+  body('breed_id')
+    .isInt({ min: 1 })
+    .withMessage('Debe seleccionar una raza válida.'),
+  body('photo_url')
+    .optional()
+    .trim()
+    .custom((value) => {
+      if (value && !value.startsWith('http://') && !value.startsWith('https://')) {
+        // Allows simple local avatar filename values or relative paths too, let's relax it slightly for avatar image names, but warn if it is an invalid format. Let's just check length and trim.
+        if (value.length === 0) {
+          throw new Error('La foto de la mascota no puede estar vacía.');
+        }
+      }
+      return true;
+    }),
+  body('age')
+    .optional()
+    .trim(),
+  body('fur_color')
+    .optional()
+    .trim(),
+  body('temperament')
+    .optional()
+    .trim(),
+  body('status')
+    .optional()
+    .isIn(['active', 'inactive'])
+    .withMessage("El estado de la mascota debe ser 'active' o 'inactive'."),
+  body('observations')
+    .optional()
+    .trim(),
+  handleValidationErrors
+];

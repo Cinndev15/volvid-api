@@ -40,3 +40,81 @@ CREATE TABLE IF NOT EXISTS pet_owners (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Tabla de Razas (Breeds)
+CREATE TABLE IF NOT EXISTS breeds (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  type ENUM('dog', 'cat') NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Semilla de Razas de Perros
+INSERT INTO breeds (type, name) VALUES 
+('dog', 'Golden Retriever'),
+('dog', 'Pastor Alemán'),
+('dog', 'French Bulldog'),
+('dog', 'Beagle'),
+('dog', 'Poodle'),
+('dog', 'Labrador Retriever'),
+('dog', 'Chihuahua'),
+('dog', 'Boxer'),
+('dog', 'Siberian Husky'),
+('dog', 'Pug'),
+('dog', 'Cocker Spaniel'),
+('dog', 'Rottweiler'),
+('dog', 'Yorkshire Terrier'),
+('dog', 'Shih Tzu'),
+('dog', 'Border Collie'),
+('dog', 'Pomeranian'),
+('dog', 'Dálmata'),
+('dog', 'Dóberman'),
+('dog', 'Pitbull'),
+('dog', 'Schnauzer'),
+('dog', 'Mestizo / Criollo')
+ON DUPLICATE KEY UPDATE name=name;
+
+-- Semilla de Razas de Gatos
+INSERT INTO breeds (type, name) VALUES 
+('cat', 'Persa'),
+('cat', 'Maine Coon'),
+('cat', 'Siamés'),
+('cat', 'Bengala'),
+('cat', 'Esfinge (Sphynx)'),
+('cat', 'British Shorthair'),
+('cat', 'Ragdoll'),
+('cat', 'Abisinio'),
+('cat', 'Sagrado de Birmania'),
+('cat', 'Azul Ruso'),
+('cat', 'Scottish Fold'),
+('cat', 'American Shorthair'),
+('cat', 'Birmano'),
+('cat', 'Siberiano'),
+('cat', 'Angora Turco'),
+('cat', 'Bombay'),
+('cat', 'Manx'),
+('cat', 'Chartreux (Cartujo)'),
+('cat', 'Mau Egipcio'),
+('cat', 'Devon Rex'),
+('cat', 'Mestizo / Criollo')
+ON DUPLICATE KEY UPDATE name=name;
+
+-- Tabla de Mascotas (Pets)
+CREATE TABLE IF NOT EXISTS pets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  owner_id INT NOT NULL,
+  breed_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  type ENUM('dog', 'cat') NOT NULL,
+  photo_url VARCHAR(500) NULL, -- Almacena foto o avatar seleccionado
+  age VARCHAR(100) NULL, -- Edad descriptiva (ej: "2 años, 6 meses")
+  fur_color VARCHAR(100) NULL, -- Color de pelaje (ej: "Marrón")
+  temperament VARCHAR(100) NULL, -- Temperamento (ej: "Tranquilo")
+  status ENUM('active', 'inactive') DEFAULT 'active', -- Estado activo/inactivo
+  observations TEXT NULL, -- Observaciones
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
+  FOREIGN KEY (breed_id) REFERENCES breeds(id)
+);
