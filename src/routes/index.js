@@ -3,6 +3,8 @@ import authRoutes from './auth.routes.js';
 import breedRoutes from './breed.routes.js';
 import petRoutes from './pet.routes.js';
 import clientRoutes from './client.routes.js';
+import vetRoutes from './vet.routes.js';
+import medicalRecordRoutes from './medicalRecord.routes.js';
 
 const router = Router();
 
@@ -11,5 +13,7 @@ router.use('/auth', authRoutes);
 router.use('/breeds', breedRoutes);
 router.use('/pets', petRoutes);
 router.use('/clients', clientRoutes);
+router.use('/vets', vetRoutes);
+router.use('/medical-records', medicalRecordRoutes);
 
 export default router;

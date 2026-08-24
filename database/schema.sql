@@ -141,3 +141,52 @@ CREATE TABLE IF NOT EXISTS clinic_patients (
   FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE
 );
+
+-- Tabla de Veterinarios por Clínica (Veterinarians)
+CREATE TABLE IF NOT EXISTS veterinarians (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id INT NOT NULL,
+  user_id INT NULL,
+  full_name VARCHAR(255) NOT NULL,
+  document_number VARCHAR(50) NULL,
+  professional_card VARCHAR(50) NOT NULL,
+  specialty VARCHAR(100) DEFAULT 'Medicina General',
+  phone VARCHAR(50) NULL,
+  email VARCHAR(255) NULL,
+  status ENUM('active', 'inactive') DEFAULT 'active',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+-- Tabla de Historias Clínicas con Consecutivo por Veterinaria (Medical Records)
+CREATE TABLE IF NOT EXISTS medical_records (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id INT NOT NULL,
+  pet_id INT NOT NULL,
+  owner_id INT NOT NULL,
+  vet_id INT NOT NULL,
+  consecutive_number INT NOT NULL,
+  consecutive_code VARCHAR(50) NOT NULL,
+  record_type ENUM('consultation', 'control', 'vaccination', 'deworming', 'surgery', 'emergency') DEFAULT 'consultation',
+  reason TEXT NOT NULL,
+  anamnesis TEXT NULL,
+  weight_kg DECIMAL(5,2) NULL,
+  temperature DECIMAL(4,2) NULL,
+  heart_rate INT NULL,
+  respiratory_rate INT NULL,
+  mucosa_state VARCHAR(100) NULL,
+  body_condition VARCHAR(50) NULL,
+  diagnosis TEXT NOT NULL,
+  treatment TEXT NOT NULL,
+  prescription TEXT NULL,
+  next_control_date DATE NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_clinic_consecutive (clinic_id, consecutive_number),
+  FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
+  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
+  FOREIGN KEY (vet_id) REFERENCES veterinarians(id)
+);

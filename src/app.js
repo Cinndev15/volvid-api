@@ -474,6 +474,36 @@ app.get('/', (req, res) => {
           </tr>
           <tr>
             <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/vets/clinic/:clinicId</span></td>
+            <td><span class="endpoint-desc">Obtiene la lista de veterinarios activos registrados en una clínica específica.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/vets</span></td>
+            <td><span class="endpoint-desc">Registra un nuevo veterinario vinculado a la clínica con su tarjeta profesional y especialidad.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/medical-records</span></td>
+            <td><span class="endpoint-desc">Crea una nueva Historia Clínica asignando consecutivo exclusivo por clínica (ej. HC-0001) con examen físico, diagnóstico y receta.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/medical-records/pet/:petId</span></td>
+            <td><span class="endpoint-desc">Consulta el historial clínico cronológico completo de una mascota.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/medical-records/consecutive/:clinicId</span></td>
+            <td><span class="endpoint-desc">Obtiene el siguiente número de consecutivo correlativo (ej. HC-0001) para una veterinaria.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
             <td><span class="endpoint-path">/api/pets</span></td>
             <td><span class="endpoint-desc">Obtiene la lista de mascotas registradas por el propietario autenticado.</span></td>
             <td><span class="security-badge" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">JWT OWNER</span></td>

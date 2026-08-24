@@ -892,6 +892,242 @@
           }
         }
       }
+    },
+    "/api/vets/clinic/{clinicId}": {
+      "get": {
+        "tags": [
+          "Veterinarios"
+        ],
+        "summary": "Obtener veterinarios activos de una clínica",
+        "parameters": [
+          {
+            "name": "clinicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la clínica"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de veterinarios"
+          }
+        }
+      }
+    },
+    "/api/vets": {
+      "post": {
+        "tags": [
+          "Veterinarios"
+        ],
+        "summary": "Registrar un nuevo veterinario para la clínica",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clinic_id",
+                  "full_name",
+                  "professional_card"
+                ],
+                "properties": {
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "example": "Dra. Laura Gómez"
+                  },
+                  "document_number": {
+                    "type": "string",
+                    "example": "1024567890"
+                  },
+                  "professional_card": {
+                    "type": "string",
+                    "example": "TP-18942-COMVEZCOL"
+                  },
+                  "specialty": {
+                    "type": "string",
+                    "example": "Medicina Felina y Canina"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "3158901234"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "laura.gomez@volvid.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Veterinario registrado con éxito"
+          }
+        }
+      }
+    },
+    "/api/medical-records": {
+      "post": {
+        "tags": [
+          "Historias Clínicas"
+        ],
+        "summary": "Crear una nueva Historia Clínica con consecutivo correlativo por clínica",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clinic_id",
+                  "pet_id",
+                  "vet_id",
+                  "reason",
+                  "diagnosis",
+                  "treatment"
+                ],
+                "properties": {
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "pet_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "vet_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "record_type": {
+                    "type": "string",
+                    "enum": [
+                      "consultation",
+                      "control",
+                      "vaccination",
+                      "deworming",
+                      "surgery",
+                      "emergency"
+                    ],
+                    "example": "consultation"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "Vacunación y chequeo general"
+                  },
+                  "anamnesis": {
+                    "type": "string",
+                    "example": "Paciente alerta, apetito normal, sin vómito ni diarrea."
+                  },
+                  "weight_kg": {
+                    "type": "number",
+                    "example": 28.5
+                  },
+                  "temperature": {
+                    "type": "number",
+                    "example": 38.4
+                  },
+                  "heart_rate": {
+                    "type": "integer",
+                    "example": 95
+                  },
+                  "respiratory_rate": {
+                    "type": "integer",
+                    "example": 24
+                  },
+                  "mucosa_state": {
+                    "type": "string",
+                    "example": "Rosadas, TLLC 2 seg"
+                  },
+                  "body_condition": {
+                    "type": "string",
+                    "example": "3/5"
+                  },
+                  "diagnosis": {
+                    "type": "string",
+                    "example": "Paciente clínicamente sano"
+                  },
+                  "treatment": {
+                    "type": "string",
+                    "example": "Aplicación de vacuna séxtuple canina"
+                  },
+                  "prescription": {
+                    "type": "string",
+                    "example": "Desparasitante oral cada 3 meses"
+                  },
+                  "next_control_date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2026-11-24"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Historia clínica creada con código correlativo (ej. HC-0001)"
+          }
+        }
+      }
+    },
+    "/api/medical-records/pet/{petId}": {
+      "get": {
+        "tags": [
+          "Historias Clínicas"
+        ],
+        "summary": "Consultar historial médico completo de una mascota",
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la mascota"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historial de registros médicos"
+          }
+        }
+      }
+    },
+    "/api/medical-records/consecutive/{clinicId}": {
+      "get": {
+        "tags": [
+          "Historias Clínicas"
+        ],
+        "summary": "Obtener el siguiente número consecutivo previsto para la clínica",
+        "parameters": [
+          {
+            "name": "clinicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la clínica"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Siguiente consecutivo (next_number, next_code)"
+          }
+        }
+      }
     }
   }
 }
