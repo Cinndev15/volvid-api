@@ -27,3 +27,16 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE
 );
+
+-- Tabla de Propietarios de Mascotas (Pet Owners)
+CREATE TABLE IF NOT EXISTS pet_owners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NULL, -- Nulo si el registro es federado con Google
+  google_id VARCHAR(255) NULL UNIQUE, -- ID federado de Google
+  avatar_url VARCHAR(500) NULL, -- Foto de perfil de Google
+  terms_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

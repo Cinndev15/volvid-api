@@ -430,6 +430,12 @@ app.get('/', (req, res) => {
             <td><span class="endpoint-desc">Inicia sesión y genera un Bearer JWT token, devolviendo la fecha de expiración de la prueba.</span></td>
             <td><span class="security-badge">PUBLIC</span></td>
           </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/auth/register-owner</span></td>
+            <td><span class="endpoint-desc">Registra o inicia sesión a un propietario de mascotas (formulario tradicional o Google OAuth).</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
         </tbody>
       </table>
     </div>

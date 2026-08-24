@@ -91,7 +91,7 @@ export const registerClinicAndAdmin = async (clinicData, userData) => {
 
 export const authenticateUser = async (email, password) => {
   const [users] = await pool.query(
-    `SELECT u.*, c.status as clinic_status, c.trial_end as clinic_trial_end 
+    `SELECT u.*, c.name as clinic_name, c.phone as clinic_phone, c.size as clinic_size, c.country as clinic_country, c.state as clinic_state, c.city as clinic_city, c.status as clinic_status, c.trial_end as clinic_trial_end 
      FROM users u 
      INNER JOIN clinics c ON u.clinic_id = c.id 
      WHERE u.email = ?`,
@@ -144,6 +144,13 @@ export const authenticateUser = async (email, password) => {
       role: user.role
     },
     clinic: {
+      id: user.clinic_id,
+      name: user.clinic_name,
+      phone: user.clinic_phone,
+      size: user.clinic_size,
+      country: user.clinic_country,
+      state: user.clinic_state,
+      city: user.clinic_city,
       status: user.clinic_status,
       trial_end: user.clinic_trial_end,
       is_trial_expired: isTrialExpired

@@ -1,5 +1,6 @@
 import { registerClinicAndAdmin, authenticateUser } from '../services/auth.service.js';
 import { sendWelcomeEmail } from '../services/email.service.js';
+import { registerOrLoginOwner } from '../services/owner.service.js';
 
 export const register = async (req, res, next) => {
   try {
@@ -68,6 +69,47 @@ export const login = async (req, res, next) => {
       return res.status(401).json({
         success: false,
         message: 'Correo electrónico o contraseña incorrectos.'
+      });
+    }
+    next(error);
+  }
+};
+
+export const registerOwner = async (req, res, next) => {
+  try {
+    const { full_name, email, password, google_id, avatar_url, terms_accepted } = req.body;
+
+    const result = await registerOrLoginOwner({
+      full_name,
+      email,
+      password,
+      google_id,
+      avatar_url,
+      terms_accepted
+    });
+
+    res.status(201).json({
+      success: true,
+      message: google_id 
+        ? 'Inicio de sesión con Google exitoso.' 
+        : 'Propietario registrado exitosamente.',
+      data: {
+        token: result.token,
+        owner: result.owner
+      }
+    });
+
+  } catch (error) {
+    if (error.message === 'EMAIL_EXISTS') {
+      return res.status(400).json({
+        success: false,
+        message: 'El correo electrónico ya está registrado.'
+      });
+    }
+    if (error.message === 'EMAIL_EXISTS_WITH_OTHER_METHOD') {
+      return res.status(400).json({
+        success: false,
+        message: 'El correo electrónico ya está registrado con otro método de inicio de sesión.'
       });
     }
     next(error);

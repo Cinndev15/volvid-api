@@ -239,6 +239,94 @@
             }
           }
         }
+      },
+      "PetOwnerRegisterPayload": {
+        "type": "object",
+        "required": [
+          "full_name",
+          "email",
+          "terms_accepted"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "Juan Pérez"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "juan.perez@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "mypassword123",
+            "description": "Required only if google_id is not provided."
+          },
+          "google_id": {
+            "type": "string",
+            "example": "google-oauth2|10938471209348",
+            "description": "Optional Google OAuth unique ID."
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://lh3.googleusercontent.com/a/AGNmyxZ...",
+            "description": "Optional Google Profile picture URL."
+          },
+          "terms_accepted": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "PetOwnerRegisterResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Propietario registrado exitosamente."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "example": "Juan Pérez"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "juan.perez@gmail.com"
+                  },
+                  "avatar_url": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  },
+                  "google_id": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -341,6 +429,50 @@
                       "example": "Correo electrónico o contraseña incorrectos."
                     }
                   }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/auth/register-owner": {
+      "post": {
+        "summary": "Register or Login Pet Owner (Form / Google)",
+        "description": "Registers a new pet owner. If registered with Google (google_id provided), the password is not required. If the email already exists with a Google account, it performs a login. If it exists as a traditional email/password account, it links the Google account.",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PetOwnerRegisterPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pet Owner registered or logged in successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PetOwnerRegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors, email already exists, or registered with another method.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
