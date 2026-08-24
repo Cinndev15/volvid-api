@@ -450,6 +450,30 @@ app.get('/', (req, res) => {
           </tr>
           <tr>
             <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/clients/search</span></td>
+            <td><span class="endpoint-desc">Busca propietarios y sus mascotas por coincidencia de cédula, teléfono o nombre para vinculación bajo demanda.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/clients/link</span></td>
+            <td><span class="endpoint-desc">Vincula un paciente (mascota y propietario) a una veterinaria específica.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/clients/clinic/:clinicId</span></td>
+            <td><span class="endpoint-desc">Obtiene la lista de pacientes y propietarios vinculados exclusivamente a la clínica indicada.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/clients/register-and-link</span></td>
+            <td><span class="endpoint-desc">Registra un nuevo propietario y mascota en Volvid y los vincula automáticamente a la veterinaria.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
             <td><span class="endpoint-path">/api/pets</span></td>
             <td><span class="endpoint-desc">Obtiene la lista de mascotas registradas por el propietario autenticado.</span></td>
             <td><span class="security-badge" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">JWT OWNER</span></td>

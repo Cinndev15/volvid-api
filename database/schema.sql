@@ -19,6 +19,10 @@ CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   clinic_id INT NOT NULL,
   full_name VARCHAR(255) NOT NULL,
+  document_number VARCHAR(50) NULL,
+  phone VARCHAR(50) NULL,
+  address VARCHAR(255) NULL,
+  city VARCHAR(100) NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   terms_accepted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -118,4 +122,22 @@ CREATE TABLE IF NOT EXISTS pets (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
   FOREIGN KEY (breed_id) REFERENCES breeds(id)
+);
+
+
+-- Tabla de Vinculación de Pacientes por Veterinaria (Clinic Patients)
+CREATE TABLE IF NOT EXISTS clinic_patients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  clinic_id INT NOT NULL,
+  pet_id INT NOT NULL,
+  owner_id INT NOT NULL,
+  notes TEXT NULL,
+  status ENUM('active', 'inactive', 'archived') DEFAULT 'active',
+  linked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_clinic_pet (clinic_id, pet_id),
+  FOREIGN KEY (clinic_id) REFERENCES clinics(id) ON DELETE CASCADE,
+  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE
 );

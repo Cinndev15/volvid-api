@@ -337,7 +337,10 @@
           },
           "type": {
             "type": "string",
-            "enum": ["dog", "cat"],
+            "enum": [
+              "dog",
+              "cat"
+            ],
             "example": "dog"
           },
           "name": {
@@ -360,7 +363,10 @@
           },
           "type": {
             "type": "string",
-            "enum": ["dog", "cat"],
+            "enum": [
+              "dog",
+              "cat"
+            ],
             "example": "dog"
           },
           "breed_id": {
@@ -387,7 +393,10 @@
           },
           "status": {
             "type": "string",
-            "enum": ["active", "inactive"],
+            "enum": [
+              "active",
+              "inactive"
+            ],
             "example": "active",
             "default": "active"
           },
@@ -637,7 +646,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["dog", "cat"]
+              "enum": [
+                "dog",
+                "cat"
+              ]
             },
             "description": "Filter by pet type: dog or cat"
           }
@@ -770,6 +782,113 @@
           },
           "500": {
             "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/api/clients/search": {
+      "get": {
+        "tags": [
+          "Clientes y Pacientes"
+        ],
+        "summary": "Buscar propietarios y mascotas para vinculación bajo demanda",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Cédula/Documento, Teléfono, Email o Nombre a buscar"
+          },
+          {
+            "name": "clinic_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la clínica para verificar si ya está vinculado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultados encontrados con indicador is_linked"
+          }
+        }
+      }
+    },
+    "/api/clients/link": {
+      "post": {
+        "tags": [
+          "Clientes y Pacientes"
+        ],
+        "summary": "Vincular una mascota y su propietario a una veterinaria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clinic_id",
+                  "pet_id"
+                ],
+                "properties": {
+                  "clinic_id": {
+                    "type": "integer",
+                    "example": 5
+                  },
+                  "pet_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "notes": {
+                    "type": "string",
+                    "example": "Primera visita por control"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Paciente vinculado exitosamente"
+          }
+        }
+      }
+    },
+    "/api/clients/clinic/{clinicId}": {
+      "get": {
+        "tags": [
+          "Clientes y Pacientes"
+        ],
+        "summary": "Listar pacientes vinculados exclusivamente a una veterinaria",
+        "parameters": [
+          {
+            "name": "clinicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la clínica"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtro de búsqueda por nombre, cédula o raza"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de pacientes vinculados"
           }
         }
       }
