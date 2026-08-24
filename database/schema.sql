@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS pets (
   temperament VARCHAR(100) NULL, -- Temperamento (ej: "Tranquilo")
   status ENUM('active', 'inactive') DEFAULT 'active', -- Estado activo/inactivo
   observations TEXT NULL, -- Observaciones
+  qr_code TEXT NULL, -- Código QR en base64 (data:image/png;base64,...)
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,

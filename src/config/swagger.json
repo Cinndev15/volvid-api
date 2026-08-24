@@ -449,6 +449,11 @@
             "nullable": true,
             "example": "Tiene todas sus vacunas al día y es muy sociable."
           },
+          "qr_code": {
+            "type": "string",
+            "description": "QR code as a base64-encoded PNG data URI (data:image/png;base64,...). Contains pet identification data in JSON format.",
+            "example": "data:image/png;base64,iVBORw0KGgo..."
+          },
           "breed_name": {
             "type": "string",
             "example": "Golden Retriever"
