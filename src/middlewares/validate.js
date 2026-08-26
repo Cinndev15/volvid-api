@@ -174,3 +174,26 @@ export const registerPetValidationRules = [
     .trim(),
   handleValidationErrors
 ];
+
+
+// Lost Pet reporting validation schema
+export const reportLostPetValidationRules = [
+  body("lost_location")
+    .trim()
+    .notEmpty()
+    .withMessage("El lugar donde se extravió la mascota es requerido."),
+  body("lost_date")
+    .optional()
+    .trim(),
+  body("contact_phone")
+    .trim()
+    .notEmpty()
+    .withMessage("El teléfono o medio de contacto de emergencia es requerido."),
+  body("reward")
+    .optional()
+    .trim(),
+  body("notes")
+    .optional()
+    .trim(),
+  handleValidationErrors
+];

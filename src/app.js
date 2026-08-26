@@ -526,6 +526,24 @@ app.get('/', (req, res) => {
             <td><span class="endpoint-desc">Obtiene la lista de mascotas registradas por el propietario autenticado.</span></td>
             <td><span class="security-badge" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">JWT OWNER</span></td>
           </tr>
+                  <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/pets/:id/report-lost</span></td>
+            <td><span class="endpoint-desc">Reporta una mascota como extraviada (Alerta SOS), activando modo rescate y aviso comunitario.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">JWT OWNER</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/pets/:id/mark-found</span></td>
+            <td><span class="endpoint-desc">Marca la mascota como encontrada y desactiva la alerta SOS.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">JWT OWNER</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/pets/lost</span></td>
+            <td><span class="endpoint-desc">Feed público de todas las mascotas actualmente reportadas como extraviadas.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
         </tbody>
       </table>
     </div>

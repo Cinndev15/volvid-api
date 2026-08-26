@@ -476,6 +476,93 @@
             "format": "date-time"
           }
         }
+      },
+      "ReportLostPetPayload": {
+        "type": "object",
+        "required": [
+          "lost_location",
+          "contact_phone"
+        ],
+        "properties": {
+          "lost_location": {
+            "type": "string",
+            "example": "Parque El Virrey, Bogotá D.C."
+          },
+          "lost_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-08-26"
+          },
+          "contact_phone": {
+            "type": "string",
+            "example": "+57 320 492 3304"
+          },
+          "reward": {
+            "type": "string",
+            "example": "$200.000 COP"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Lleva collar rojo con placa, es asustadizo pero amigable."
+          }
+        }
+      },
+      "LostPetReport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "pet_id": {
+            "type": "integer",
+            "example": 5
+          },
+          "owner_id": {
+            "type": "integer",
+            "example": 7
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
+          },
+          "lost_date": {
+            "type": "string",
+            "example": "2026-08-26"
+          },
+          "lost_location": {
+            "type": "string",
+            "example": "Parque El Virrey, Bogotá"
+          },
+          "contact_phone": {
+            "type": "string",
+            "example": "+57 320 492 3304"
+          },
+          "reward": {
+            "type": "string",
+            "example": "$200.000 COP"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Lleva collar rojo"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "pet_name": {
+            "type": "string",
+            "example": "Max"
+          },
+          "pet_type": {
+            "type": "string",
+            "example": "dog"
+          },
+          "breed_name": {
+            "type": "string",
+            "example": "Golden Retriever"
+          }
+        }
       }
     }
   },
@@ -1299,6 +1386,121 @@
         "responses": {
           "200": {
             "description": "Estado actualizado"
+          }
+        }
+      }
+    },
+    "/api/pets/lost": {
+      "get": {
+        "summary": "Feed público de mascotas perdidas (Alerta Comunitaria)",
+        "description": "Retorna el listado de todas las mascotas actualmente reportadas como extraviadas con detalles de contacto y recompensa.",
+        "tags": [
+          "Mascotas Perdidas / SOS"
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de mascotas extraviadas activas"
+          }
+        }
+      }
+    },
+    "/api/pets/{id}/lost-report": {
+      "get": {
+        "summary": "Consultar alerta activa de pérdida de una mascota",
+        "description": "Obtiene el reporte de pérdida activo para una mascota específica si existe.",
+        "tags": [
+          "Mascotas Perdidas / SOS"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la mascota"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos del reporte de pérdida"
+          }
+        }
+      }
+    },
+    "/api/pets/{id}/report-lost": {
+      "post": {
+        "summary": "Reportar mascota como perdida (Activar Alerta SOS)",
+        "description": "Registra una alerta de pérdida para la mascota del propietario autenticado, activando el modo rescate.",
+        "tags": [
+          "Mascotas Perdidas / SOS"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la mascota"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportLostPetPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Alerta de pérdida registrada exitosamente"
+          },
+          "404": {
+            "description": "Mascota no encontrada o no autorizada"
+          }
+        }
+      }
+    },
+    "/api/pets/{id}/mark-found": {
+      "post": {
+        "summary": "Marcar mascota como encontrada (Desactivar Alerta SOS)",
+        "description": "Desactiva la alerta de pérdida de la mascota y restaura el estado seguro.",
+        "tags": [
+          "Mascotas Perdidas / SOS"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la mascota"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mascota marcada como encontrada exitosamente"
+          },
+          "404": {
+            "description": "Mascota no encontrada o no autorizada"
           }
         }
       }

@@ -212,3 +212,22 @@ CREATE TABLE IF NOT EXISTS appointments (
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE,
   FOREIGN KEY (vet_id) REFERENCES veterinarians(id) ON DELETE SET NULL
 );
+
+
+-- Tabla de Reportes de Mascotas Perdidas (Lost Pet Reports)
+CREATE TABLE IF NOT EXISTS lost_pet_reports (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  pet_id INT NOT NULL,
+  owner_id INT NOT NULL,
+  status ENUM('active', 'resolved', 'cancelled') DEFAULT 'active',
+  lost_date DATE NOT NULL,
+  lost_location VARCHAR(255) NOT NULL,
+  contact_phone VARCHAR(50) NOT NULL,
+  reward VARCHAR(100) NULL,
+  notes TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  resolved_at TIMESTAMP NULL DEFAULT NULL,
+  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE
+);
