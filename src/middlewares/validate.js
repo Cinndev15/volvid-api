@@ -197,3 +197,61 @@ export const reportLostPetValidationRules = [
     .trim(),
   handleValidationErrors
 ];
+
+// Service Provider registration validation rules (Walker / Transporter)
+export const registerServiceProviderValidationRules = [
+  body('full_name')
+    .trim()
+    .notEmpty()
+    .withMessage('El nombre completo es requerido.'),
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Debe ingresar un correo electrónico válido.')
+    .normalizeEmail(),
+  body('phone')
+    .trim()
+    .notEmpty()
+    .withMessage('El número de teléfono o celular es requerido.'),
+  body('document_type')
+    .optional()
+    .trim(),
+  body('document_number')
+    .trim()
+    .notEmpty()
+    .withMessage('El número de documento de identidad es requerido.'),
+  body('service_type')
+    .trim()
+    .isIn(['walker', 'transporter', 'both'])
+    .withMessage("El tipo de servicio debe ser 'walker' (Paseador), 'transporter' (Transportador) o 'both' (Ambos)."),
+  body('city')
+    .trim()
+    .notEmpty()
+    .withMessage('La ciudad de operación es requerida.'),
+  body('coverage_areas')
+    .optional()
+    .trim(),
+  body('experience_years')
+    .optional()
+    .toInt(),
+  body('vehicle_type')
+    .optional()
+    .trim(),
+  body('vehicle_plate')
+    .optional()
+    .trim(),
+  body('bio_description')
+    .optional()
+    .trim(),
+  body('hourly_rate')
+    .optional()
+    .toFloat(),
+  body('terms_accepted')
+    .custom((value) => {
+      if (value !== true && value !== 'true' && value !== 1 && value !== '1') {
+        throw new Error('Debe aceptar los términos y condiciones de prestador de servicios.');
+      }
+      return true;
+    }),
+  handleValidationErrors
+];

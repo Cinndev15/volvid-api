@@ -544,6 +544,18 @@ app.get('/', (req, res) => {
             <td><span class="endpoint-desc">Feed público de todas las mascotas actualmente reportadas como extraviadas.</span></td>
             <td><span class="security-badge">PUBLIC</span></td>
           </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/service-providers/register</span></td>
+            <td><span class="endpoint-desc">Registra una nueva postulación como paseador y/o transportador de mascotas con documentos de verificación.</span></td>
+            <td><span class="security-badge">PUBLIC / OWNER</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/service-providers/my-status</span></td>
+            <td><span class="endpoint-desc">Consulta el estado actual de postulación y verificación de antecedentes del prestador.</span></td>
+            <td><span class="security-badge">PUBLIC / OWNER</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
