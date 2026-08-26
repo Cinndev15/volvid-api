@@ -586,6 +586,48 @@ app.get('/', (req, res) => {
             <td><span class="endpoint-desc">Actualiza el estado de un administrador (active, inactive, suspended).</span></td>
             <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
           </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/pets</span></td>
+            <td><span class="endpoint-desc">Catálogo maestro de todas las mascotas registradas en Volvid con dueño, raza, estado y código QR.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/pets/:id</span></td>
+            <td><span class="endpoint-desc">Consulta la ficha técnica completa de una mascota con historias clínicas, citas y datos de contacto.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/pets/:id/qr</span></td>
+            <td><span class="endpoint-desc">Obtiene y genera el código QR oficial de Volvid en alta definición para descarga e impresión.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/owners</span></td>
+            <td><span class="endpoint-desc">Lista todos los usuarios y propietarios registrados con conteo de mascotas y fecha de alta.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/clinics</span></td>
+            <td><span class="endpoint-desc">Lista todas las clínicas veterinarias registradas con estado de prueba gratuita y métricas operativas.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/vets</span></td>
+            <td><span class="endpoint-desc">Lista todos los médicos veterinarios y sus clínicas asignadas.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/stats</span></td>
+            <td><span class="endpoint-desc">Métricas globales en tiempo real del ecosistema Volvid para el Dashboard de Administración.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
         </tbody>
       </table>
     </div>

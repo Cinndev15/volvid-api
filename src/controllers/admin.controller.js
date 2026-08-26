@@ -3,7 +3,15 @@ import {
   authenticateVolvidAdmin,
   getVolvidAdminProfile,
   listVolvidAdmins,
-  updateVolvidAdminStatus
+  updateVolvidAdminStatus,
+  listVolvidPetsAdmin,
+  getVolvidPetDetailsAdmin,
+  getVolvidPetQrAdmin,
+  listVolvidOwnersAdmin,
+  listVolvidClinicsAdmin,
+  listVolvidVeterinariansAdmin,
+  listVolvidServiceProvidersAdmin,
+  getVolvidAdminDashboardStats
 } from '../services/admin.service.js';
 
 /**
@@ -147,6 +155,166 @@ export const updateStatus = async (req, res, next) => {
         message: 'Administrador no encontrado.'
       });
     }
+    next(error);
+  }
+};
+
+/**
+ * Controller to list all registered pets for the administrator
+ */
+export const listPets = async (req, res, next) => {
+  try {
+    const { search, status, type } = req.query;
+    const pets = await listVolvidPetsAdmin({ search, status, type });
+
+    res.status(200).json({
+      success: true,
+      message: 'Catálogo de mascotas obtenido exitosamente.',
+      count: pets.length,
+      data: pets
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to get single pet details for administration
+ */
+export const getPetDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const pet = await getVolvidPetDetailsAdmin(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Detalles de la mascota obtenidos exitosamente.',
+      data: pet
+    });
+  } catch (error) {
+    if (error.message === 'PET_NOT_FOUND') {
+      return res.status(404).json({
+        success: false,
+        message: 'Mascota no encontrada.'
+      });
+    }
+    next(error);
+  }
+};
+
+/**
+ * Controller to get or render pet QR Code
+ */
+export const getPetQr = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const qrData = await getVolvidPetQrAdmin(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Código QR obtenido exitosamente.',
+      data: qrData
+    });
+  } catch (error) {
+    if (error.message === 'PET_NOT_FOUND') {
+      return res.status(404).json({
+        success: false,
+        message: 'Mascota no encontrada.'
+      });
+    }
+    next(error);
+  }
+};
+
+/**
+ * Controller to list all registered pet owners (users)
+ */
+export const listOwners = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    const owners = await listVolvidOwnersAdmin({ search });
+
+    res.status(200).json({
+      success: true,
+      message: 'Lista de propietarios registrada obtenida exitosamente.',
+      count: owners.length,
+      data: owners
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to list all registered veterinary clinics
+ */
+export const listClinics = async (req, res, next) => {
+  try {
+    const { search, status, city } = req.query;
+    const clinics = await listVolvidClinicsAdmin({ search, status, city });
+
+    res.status(200).json({
+      success: true,
+      message: 'Lista de clínicas veterinarias obtenida exitosamente.',
+      count: clinics.length,
+      data: clinics
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to list all registered veterinarians
+ */
+export const listVeterinarians = async (req, res, next) => {
+  try {
+    const { search, clinic_id } = req.query;
+    const vets = await listVolvidVeterinariansAdmin({ search, clinic_id });
+
+    res.status(200).json({
+      success: true,
+      message: 'Lista de médicos veterinarios obtenida exitosamente.',
+      count: vets.length,
+      data: vets
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to list all registered service providers (walkers / transporters)
+ */
+export const listServiceProviders = async (req, res, next) => {
+  try {
+    const { search, service_type, status } = req.query;
+    const providers = await listVolvidServiceProvidersAdmin({ search, service_type, status });
+
+    res.status(200).json({
+      success: true,
+      message: 'Lista de prestadores de servicio obtenida exitosamente.',
+      count: providers.length,
+      data: providers
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Controller to get global dashboard metrics & stats
+ */
+export const getDashboardStats = async (req, res, next) => {
+  try {
+    const overview = await getVolvidAdminDashboardStats();
+
+    res.status(200).json({
+      success: true,
+      message: 'Métricas generales del panel de administración obtenidas exitosamente.',
+      data: overview
+    });
+  } catch (error) {
     next(error);
   }
 };
