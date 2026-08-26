@@ -231,3 +231,51 @@ CREATE TABLE IF NOT EXISTS lost_pet_reports (
   FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
   FOREIGN KEY (owner_id) REFERENCES pet_owners(id) ON DELETE CASCADE
 );
+
+-- Tabla de Prestadores de Servicios (Service Providers: Paseadores / Transportadores)
+CREATE TABLE IF NOT EXISTS service_providers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NULL,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  document_type VARCHAR(50) NOT NULL DEFAULT 'Cédula de Ciudadanía',
+  document_number VARCHAR(100) NOT NULL,
+  service_type ENUM('walker', 'transporter', 'both') NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  coverage_areas VARCHAR(255) NULL,
+  experience_years INT DEFAULT 0,
+  vehicle_type VARCHAR(100) NULL,
+  vehicle_plate VARCHAR(50) NULL,
+  bio_description TEXT NULL,
+  hourly_rate DECIMAL(10,2) NULL,
+  document_id_front_url LONGTEXT NULL,
+  document_id_back_url LONGTEXT NULL,
+  criminal_record_doc_url LONGTEXT NULL,
+  driver_license_doc_url LONGTEXT NULL,
+  status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+  terms_accepted BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_provider_email (email),
+  INDEX idx_provider_service_type (service_type),
+  INDEX idx_provider_status (status)
+);
+
+-- Tabla de Administradores de la Plataforma Volvid (Volvid Platform Admins)
+CREATE TABLE IF NOT EXISTS volvid_admins (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  phone VARCHAR(50) NULL,
+  role ENUM('superadmin', 'admin', 'support') DEFAULT 'superadmin',
+  status ENUM('active', 'inactive', 'suspended') DEFAULT 'active',
+  avatar_url VARCHAR(500) NULL,
+  last_login_at TIMESTAMP NULL DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_volvid_admin_email (email),
+  INDEX idx_volvid_admin_status (status)
+);
+

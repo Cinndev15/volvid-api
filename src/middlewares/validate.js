@@ -255,3 +255,51 @@ export const registerServiceProviderValidationRules = [
     }),
   handleValidationErrors
 ];
+
+// Volvid Administrator registration validation rules
+export const registerAdminValidationRules = [
+  body('full_name')
+    .trim()
+    .notEmpty()
+    .withMessage('El nombre completo del administrador es requerido.'),
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Debe ingresar un correo electrónico válido.')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('La contraseña debe tener al menos 6 caracteres.'),
+  body('phone')
+    .optional()
+    .trim(),
+  body('role')
+    .optional()
+    .trim()
+    .isIn(['superadmin', 'admin', 'support'])
+    .withMessage("El rol debe ser 'superadmin', 'admin' o 'support'."),
+  body('avatar_url')
+    .optional()
+    .trim()
+    .custom((value) => {
+      if (value && !value.startsWith('http://') && !value.startsWith('https://')) {
+        throw new Error('El avatar_url debe ser una dirección URL válida.');
+      }
+      return true;
+    }),
+  handleValidationErrors
+];
+
+// Volvid Administrator login validation rules
+export const loginAdminValidationRules = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Debe ingresar un correo electrónico válido.')
+    .normalizeEmail(),
+  body('password')
+    .notEmpty()
+    .withMessage('La contraseña es requerida.'),
+  handleValidationErrors
+];
+

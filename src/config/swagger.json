@@ -102,6 +102,143 @@
           }
         }
       },
+      "AdminRegisterPayload": {
+        "type": "object",
+        "required": [
+          "full_name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "Admin Volvid Principal"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@volvidmascotas.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "SuperSecretPass2026!"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+57 300 000 0000"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "superadmin",
+              "admin",
+              "support"
+            ],
+            "example": "superadmin"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://volvidmascotas.com/assets/admin-avatar.png"
+          }
+        }
+      },
+      "AdminLoginPayload": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@volvidmascotas.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "SuperSecretPass2026!"
+          }
+        }
+      },
+      "AdminAuthResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Inicio de sesión de administrador exitoso."
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "admin": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "example": "Admin Volvid Principal"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "admin@volvidmascotas.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "+57 300 000 0000"
+                  },
+                  "role": {
+                    "type": "string",
+                    "example": "superadmin"
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "active"
+                  },
+                  "avatar_url": {
+                    "type": "string",
+                    "example": "https://volvidmascotas.com/assets/admin-avatar.png"
+                  },
+                  "last_login_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-26T21:45:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AdminStatusUpdatePayload": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "suspended"
+            ],
+            "example": "active"
+          }
+        }
+      },
       "ClinicRegisterResponse": {
         "type": "object",
         "properties": {
@@ -1501,6 +1638,167 @@
           },
           "404": {
             "description": "Mascota no encontrada o no autorizada"
+          }
+        }
+      }
+    },
+    "/api/admins/register": {
+      "post": {
+        "summary": "Registrar Administrador de la Plataforma Volvid",
+        "description": "Registra un nuevo usuario con rol de administrador (superadmin, admin o support) para la gestión global de la plataforma Volvid.",
+        "tags": [
+          "Administradores Volvid"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRegisterPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Administrador registrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Correo ya registrado o datos inválidos"
+          }
+        }
+      }
+    },
+    "/api/admins/login": {
+      "post": {
+        "summary": "Iniciar Sesión de Administrador Volvid",
+        "description": "Autentica las credenciales de un administrador de Volvid y retorna un token JWT Bearer con rol volvid_admin.",
+        "tags": [
+          "Administradores Volvid"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminLoginPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión de administrador exitoso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Correo electrónico o contraseña incorrectos"
+          },
+          "403": {
+            "description": "Cuenta de administrador inactiva o suspendida"
+          }
+        }
+      }
+    },
+    "/api/admins/profile": {
+      "get": {
+        "summary": "Obtener Perfil del Administrador Autenticado",
+        "description": "Retorna los datos de perfil y rol del administrador actualmente autenticado mediante Bearer Token.",
+        "tags": [
+          "Administradores Volvid"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perfil del administrador obtenido exitosamente"
+          },
+          "401": {
+            "description": "No autorizado o token expirado"
+          }
+        }
+      }
+    },
+    "/api/admins": {
+      "get": {
+        "summary": "Listar Administradores de Volvid",
+        "description": "Obtiene la lista completa de administradores de la plataforma para su gestión.",
+        "tags": [
+          "Administradores Volvid"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de administradores obtenida exitosamente"
+          },
+          "401": {
+            "description": "No autorizado"
+          }
+        }
+      }
+    },
+    "/api/admins/{id}/status": {
+      "put": {
+        "summary": "Actualizar Estado de un Administrador",
+        "description": "Modifica el estado de un administrador a 'active', 'inactive' o 'suspended'.",
+        "tags": [
+          "Administradores Volvid"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del administrador a modificar"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminStatusUpdatePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Estado actualizado exitosamente"
+          },
+          "400": {
+            "description": "Estado inválido"
+          },
+          "404": {
+            "description": "Administrador no encontrado"
           }
         }
       }

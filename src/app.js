@@ -556,6 +556,36 @@ app.get('/', (req, res) => {
             <td><span class="endpoint-desc">Consulta el estado actual de postulación y verificación de antecedentes del prestador.</span></td>
             <td><span class="security-badge">PUBLIC / OWNER</span></td>
           </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/admins/register</span></td>
+            <td><span class="endpoint-desc">Registra un nuevo Administrador de la Plataforma Volvid (superadmin, admin o soporte).</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/admins/login</span></td>
+            <td><span class="endpoint-desc">Inicia sesión como Administrador de Volvid y genera token JWT Bearer con rol volvid_admin.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins/profile</span></td>
+            <td><span class="endpoint-desc">Obtiene los datos del perfil y permisos del administrador autenticado.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
+            <td><span class="endpoint-path">/api/admins</span></td>
+            <td><span class="endpoint-desc">Lista todos los administradores registrados en la plataforma Volvid.</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
+          <tr>
+            <td><span class="method-badge post" style="background-color: rgba(245, 158, 11, 0.08); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.2);">PUT</span></td>
+            <td><span class="endpoint-path">/api/admins/:id/status</span></td>
+            <td><span class="endpoint-desc">Actualiza el estado de un administrador (active, inactive, suspended).</span></td>
+            <td><span class="security-badge" style="background-color: rgba(139, 92, 246, 0.08); color: #6d28d9; border: 1px solid rgba(139, 92, 246, 0.2);">JWT ADMIN</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
