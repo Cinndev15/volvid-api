@@ -1,6 +1,11 @@
 import { Router } from 'express';
-import { register, login, registerOwner } from '../controllers/auth.controller.js';
-import { registerValidationRules, loginValidationRules, registerOwnerValidationRules } from '../middlewares/validate.js';
+import { register, login, registerOwner, forgotPassword } from '../controllers/auth.controller.js';
+import {
+  registerValidationRules,
+  loginValidationRules,
+  registerOwnerValidationRules,
+  forgotPasswordValidationRules
+} from '../middlewares/validate.js';
 
 const router = Router();
 
@@ -12,5 +17,8 @@ router.post('/login', loginValidationRules, login);
 
 // POST /api/auth/register-owner
 router.post('/register-owner', registerOwnerValidationRules, registerOwner);
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', forgotPasswordValidationRules, forgotPassword);
 
 export default router;

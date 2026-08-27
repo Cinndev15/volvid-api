@@ -1,4 +1,4 @@
-import { registerClinicAndAdmin, authenticateUser } from '../services/auth.service.js';
+import { registerClinicAndAdmin, authenticateUser, requestPasswordReset } from '../services/auth.service.js';
 import { sendWelcomeEmail } from '../services/email.service.js';
 import { registerOrLoginOwner } from '../services/owner.service.js';
 
@@ -126,3 +126,18 @@ export const registerOwner = async (req, res, next) => {
     next(error);
   }
 };
+
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const result = await requestPasswordReset(email);
+
+    res.status(200).json({
+      success: true,
+      message: result.message || 'Hemos enviado las instrucciones de recuperación a tu correo electrónico.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

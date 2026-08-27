@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
 import config from '../config/config.js';
+import { sendPasswordResetEmail } from './email.service.js';
 
 export const registerClinicAndAdmin = async (clinicData, userData) => {
   let connection;
@@ -200,3 +201,81 @@ export const authenticateUser = async (email, password) => {
     }
   };
 };
+
+/**
+ * Handles password reset requests by checking user existence and sending recovery instructions.
+ * 
+ * @param {string} email User email address
+ */
+export const requestPasswordReset = async (email) => {
+  let targetUser = null;
+  let userType = 'user';
+
+  // 1. Check in users table (Veterinaries / Clinic staff)
+  const [users] = await pool.query(
+    'SELECT id, full_name, email, role FROM users WHERE email = ?',
+    [email]
+  );
+
+  if (users.length > 0) {
+    targetUser = users[0];
+    userType = 'user';
+  } else {
+    // 2. Check in pet_owners table
+    const [owners] = await pool.query(
+      'SELECT id, full_name, email FROM pet_owners WHERE email = ?',
+      [email]
+    );
+
+    if (owners.length > 0) {
+      targetUser = owners[0];
+      userType = 'owner';
+    } else {
+      // 3. Check in volvid_admins table
+      try {
+        const [admins] = await pool.query(
+          'SELECT id, full_name, email, role FROM volvid_admins WHERE email = ?',
+          [email]
+        );
+        if (admins.length > 0) {
+          targetUser = admins[0];
+          userType = 'admin';
+        }
+      } catch (err) {
+        // In case volvid_admins table is not present
+      }
+    }
+  }
+
+  // If user exists, generate reset token and send email
+  if (targetUser) {
+    const resetToken = jwt.sign(
+      {
+        userId: targetUser.id,
+        email: targetUser.email,
+        type: 'password_reset',
+        userType
+      },
+      config.jwt.secret,
+      { expiresIn: '1h' }
+    );
+
+    const resetLink = `https://app.volvidmascotas.com/reset-password?token=${resetToken}&email=${encodeURIComponent(targetUser.email)}`;
+
+    sendPasswordResetEmail(
+      targetUser.email,
+      targetUser.full_name || 'Usuario',
+      resetLink
+    ).catch((err) => {
+      console.error('❌ Error sending password reset email asynchronously:', err.message);
+    });
+  } else {
+    console.log(`ℹ️ Password reset requested for non-existent email: ${email}`);
+  }
+
+  return {
+    success: true,
+    message: 'Hemos enviado las instrucciones de recuperación a tu correo electrónico.'
+  };
+};
+

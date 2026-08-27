@@ -82,6 +82,16 @@ export const loginValidationRules = [
   handleValidationErrors
 ];
 
+// Forgot password validation schema
+export const forgotPasswordValidationRules = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Debe ingresar un correo electrónico válido.')
+    .normalizeEmail(),
+  handleValidationErrors
+];
+
 // Pet Owner registration validation schema (handles form and Google)
 export const registerOwnerValidationRules = [
   body('full_name')
