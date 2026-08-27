@@ -443,6 +443,12 @@ app.get('/', (req, res) => {
             <td><span class="security-badge">PUBLIC</span></td>
           </tr>
           <tr>
+            <td><span class="method-badge post">POST</span></td>
+            <td><span class="endpoint-path">/api/auth/reset-password</span></td>
+            <td><span class="endpoint-desc">Restablece la contraseña del usuario validando el token de recuperación y actualizando la base de datos.</span></td>
+            <td><span class="security-badge">PUBLIC</span></td>
+          </tr>
+          <tr>
             <td><span class="method-badge post" style="background-color: rgba(59, 130, 246, 0.08); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);">GET</span></td>
             <td><span class="endpoint-path">/api/breeds</span></td>
             <td><span class="endpoint-desc">Consulta el catálogo de razas de perros o gatos filtradas por tipo.</span></td>

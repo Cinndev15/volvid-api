@@ -279,3 +279,69 @@ export const requestPasswordReset = async (email) => {
   };
 };
 
+/**
+ * Validates reset token, hashes the new password, and updates the database.
+ * 
+ * @param {string} token Password reset JWT token
+ * @param {string} newPassword Plain text new password
+ */
+export const resetPassword = async (token, newPassword) => {
+  let decoded;
+  try {
+    decoded = jwt.verify(token, config.jwt.secret);
+  } catch (err) {
+    throw new Error('INVALID_OR_EXPIRED_TOKEN');
+  }
+
+  if (decoded.type !== 'password_reset' || !decoded.email) {
+    throw new Error('INVALID_OR_EXPIRED_TOKEN');
+  }
+
+  const saltRounds = 10;
+  const password_hash = await bcrypt.hash(newPassword, saltRounds);
+  let updated = false;
+
+  // 1. Try updating in users table (Veterinaries / Clinic staff)
+  const [userResult] = await pool.query(
+    'UPDATE users SET password_hash = ? WHERE email = ?',
+    [password_hash, decoded.email]
+  );
+
+  if (userResult.affectedRows > 0) {
+    updated = true;
+  } else {
+    // 2. Try updating in pet_owners table
+    const [ownerResult] = await pool.query(
+      'UPDATE pet_owners SET password_hash = ? WHERE email = ?',
+      [password_hash, decoded.email]
+    );
+
+    if (ownerResult.affectedRows > 0) {
+      updated = true;
+    } else {
+      // 3. Try updating in volvid_admins table
+      try {
+        const [adminResult] = await pool.query(
+          'UPDATE volvid_admins SET password_hash = ? WHERE email = ?',
+          [password_hash, decoded.email]
+        );
+        if (adminResult.affectedRows > 0) {
+          updated = true;
+        }
+      } catch (err) {
+        // In case volvid_admins table is not present
+      }
+    }
+  }
+
+  if (!updated) {
+    throw new Error('USER_NOT_FOUND');
+  }
+
+  return {
+    success: true,
+    message: '¡Contraseña actualizada exitosamente!'
+  };
+};
+
+

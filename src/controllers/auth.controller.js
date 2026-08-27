@@ -1,4 +1,9 @@
-import { registerClinicAndAdmin, authenticateUser, requestPasswordReset } from '../services/auth.service.js';
+import {
+  registerClinicAndAdmin,
+  authenticateUser,
+  requestPasswordReset,
+  resetPassword as resetPasswordService
+} from '../services/auth.service.js';
 import { sendWelcomeEmail } from '../services/email.service.js';
 import { registerOrLoginOwner } from '../services/owner.service.js';
 
@@ -140,4 +145,31 @@ export const forgotPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+    const result = await resetPasswordService(token, password);
+
+    res.status(200).json({
+      success: true,
+      message: result.message || '¡Contraseña actualizada exitosamente!'
+    });
+  } catch (error) {
+    if (error.message === 'INVALID_OR_EXPIRED_TOKEN') {
+      return res.status(400).json({
+        success: false,
+        message: 'El enlace de recuperación es inválido o ha expirado.'
+      });
+    }
+    if (error.message === 'USER_NOT_FOUND') {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado.'
+      });
+    }
+    next(error);
+  }
+};
+
 

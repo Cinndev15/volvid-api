@@ -92,6 +92,18 @@ export const forgotPasswordValidationRules = [
   handleValidationErrors
 ];
 
+// Reset password validation schema
+export const resetPasswordValidationRules = [
+  body('token')
+    .trim()
+    .notEmpty()
+    .withMessage('El token de recuperación es requerido.'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('La contraseña debe tener al menos 6 caracteres.'),
+  handleValidationErrors
+];
+
 // Pet Owner registration validation schema (handles form and Google)
 export const registerOwnerValidationRules = [
   body('full_name')
