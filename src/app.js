@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Portal de documentación de la API de Volvid. Administre clínicas veterinarias y sus pruebas gratuitas de 14 días.">
-  <title>Volvid REST API Portal</title>
+  <title>Volvid API - REST</title>
   <!-- Google Fonts: Inter & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
